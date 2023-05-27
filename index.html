@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>What is your Makaney Code?</title>
+
+    <link rel="stylesheet" type="text/css" href="makaney_style_index.css" />
+
+    <style type="text/css" media="screen, projection">
+        /*	pulse the 'I am here' location marker */
+        @-webkit-keyframes pulse {
+            0% {
+                opacity: 1.0;
+                -webkit-transform: scale(1.05);
+            }
+
+            40% {
+                opacity: 0.25;
+                -webkit-transform: scale(0.85);
+            }
+
+            100% {
+                opacity: 1.0;
+                -webkit-transform: scale(1.05);
+            }
+        }
+
+
+        #map_canvas img[src*="blue_dot_circle.png"]:not([title]) {
+            -webkit-animation-name: pulse;
+            -webkit-animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-timing-function: ease-in-out;
+        }
+    </style>
+    <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true">
+    </script>
+    <script src="makaney_js_index.js"></script>
+</head>
+
+<body onload="initialize()">
+    <div id="PageHeader">
+        <div id="betaimage"><img src="beta4_red_bord.gif" alt="Beta"></div>
+        <div id="test">
+            <div id="divMakaney"><strong>
+                    <font face="monospace" size="5"> Makaney Code: <span id="Makaney"></span></font>
+                </strong></div>
+            <div id="divMakaneyLatLon">
+                <font size="1"><span id="MakaneyLatLon"></span></font>
+            </div>
+        </div>
+
+        <div id="share">
+
+            <div id="share_twitter">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.makaney.net/"
+                    data-text="Towards hassle-free commuting, Makaney Code a great idea to easily identify places anywhere on earth. Check it out!"
+                    data-count="none">Tweet</a>
+                <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+            </div>
+
+            <div id="share_google">
+
+                <!-- Place this tag where you want the +1 button to render -->
+                <g:plusone size="medium" annotation="none" href="http://www.makaney.net/"></g:plusone>
+
+                <!-- Place this render call where appropriate -->
+                <script type="text/javascript">
+                    (function () {
+                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                        po.src = 'https://apis.google.com/js/plusone.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                    })();
+                </script>
+            </div>
+
+            <div id="share_facebook">
+                <iframe
+                    src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.makaney.net%2F&amp;send=false&amp;layout=button_count&amp;width=80&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:80px; height:21px;"
+                    allowTransparency="true"></iframe>
+            </div>
+
+        </div>
+
+    </div>
+    <div id="bd">
+
+
+        <div id="map_canvas"></div>
+        <div id="crosshair"></div>
+        <div id="fplace" style="Display: none">
+            <div id="fplacebox">Find Place: <input type="text" size="15" id="address" /><input type="button" value="GO!"
+                    onclick="geocode()"> <input type="button" value="Current" onclick="takemehome()"></div>
+            <div id="note2">
+                <font size="1">* City, Country, Makaney Code, Addresses..etc</font>
+            </div>
+        </div>
+        <div id="PageFooter" style="Display: none">
+            <div id="getdir"><a href="javascript:copydir('FROM');">From:</a> <input type="text" id="FROM" size="12" /><a
+                    href="javascript:copydir('TO');">To:</a> <input type="text" id="TO" size="12"> <input type="button"
+                    value="Get" onclick="calcRoute()"></div>
+
+            <div id="note">
+                <font size="1">* Note: For some areas, no directions are available.</font>
+            </div>
+        </div>
+
+        <div id="FAQHELP" style="Display: none">
+
+            <div id="FAQHELPTEXT">
+                <div id="CloseFAQ"><a href="javascript:showhide('FAQHELP');"><img src="close.gif" alt="CLOSE"></a></div>
+
+
+                <b>Q: What is Makaney Code?</b>
+                <p>Makaney code is a human-friendly alphanumeric representation (like postal or zip codes) of the
+                    geographic latitude and longitude coordinates. Using Makaney code helps easily identify places on
+                    earth with an easy to remember code. That's becomes very useful especially in countries that do not
+                    implement a practical postal code system. In such countries people tend to describe their locations
+                    using directions, which is not always straightforward, waste valuable time, and results in many
+                    inconveniences especially when an ambulance needs to reach a certain location as soon as possible.
+
+                    <br>
+
+                <p> <b>Examples of Makaney Code Uses:</b></p>
+                <ul>
+                    <li><b>Addresses:</b><br>
+                        <table>
+                            <tr>
+                                <td width=50%>
+                                    <p>King Saud University, Admission Office &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                        Riyadh, Saudi Ar abia<br>
+
+                                        MKC: <a href="?TLU5+MI2A">TLU5+MI2A</a>
+                                    </p>
+                                </td>
+                                <td width=50%>
+                                    <p>9th Floor, Apartment # 902&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                        Jeddah, Saudi Arabia<br>
+                                        MKC: <a href="?TASF+K7NP">TASF+K7NP</a> </p>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td width=50%>
+                                    <p>Singing Sand Dunes&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                        Qatar,<br>
+                                        MKC: <a href="?TU6P+NKBD">TU6P+NKBD</a>
+                                    </p>
+                                </td>
+                                <td width=50%>
+                                    <p>El-tahrir Square&nbsp;&nbsp;&nbsp;&nbsp;<br>
+
+                                        Cairo, Egypt<br>
+                                        MKC: <a href="?CW7M+CE5M">CW7M+CE5M</a></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width=50%>
+                                    <p>University of Ibadan&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                        Ibadan, Nigeria,<br>
+                                        MKC: <a href="?OOML+BOYZ">OOML+BOYZ</a></p>
+                                </td>
+                                <td width=50%>
+                                    <p>
+                                        Tristan Island Settlement,<br>
+                                        Saint Helena<br>
+                                        MKC: <a href="?-KK36-2GH6">-KK36-2GH6</a>
+                            </tr>
+                        </table>
+                    </li>
+                    <li> <b>Social networks, verbal, or even handwritten communications:</b><br>
+
+                        <ul>
+                            <li>Please, send a Taxi to <a href="?SUI8+4QPS">SUI8+4QPS</a>, thanks.</li>
+                            <li>We need an ambulance @ <a href="?PWA8+8CLQ">PWA8+8CLQ</a> (Slums in India).</li>
+                            <li>If you are on campus don't forget to grab a bite from the apple tree <a
+                                    href="?NKSU-PP7">NKSU-PP7</a>.</li>
+
+                            <li>Please deliver to <a href="?CMOK+CE95">CMOK+CE95</a> apartment # 1, thank you.</li>
+                            <li>Due to car accident the intersection @ <a href="?OFCO+OO8U">OFCO+OO8U</a> is currently
+                                blocked, will keep you updated.</li>
+                        </ul>
+                    </li>
+                    <li><b>Identify locations in places with many people,</b> such as malls, concerts, football
+                        stadiums, or humanitarian camps.</li>
+
+                    <li>Many other uses.</li>
+                </ul>
+
+                <b>Q: How do I get the Makaney code?</b>
+                <p>Just place the crosshair (<img src="crosshair.gif" alt="crosshair">) in the center of the map at the
+                    desired destination and the Makaney Code will appear above (left your finger up -- for Makaney Code
+                    to be updated -- if using a finger touch device, e.g. iPhone).</p>
+
+                <b>Q: How do you calculate Makaney code?</b>
+                <p>The idea is very simple (and meant to be simple for ease of adoption), we take 4 decimal places of
+                    the decimal representation of the geographic latitude and longitude and convert them to Base 33 and
+                    then add the directions, which results in an easy to read, write, speak, and remember place location
+                    anywhere on earth. </p>
+
+                <b>Q: How accurate is Makaney Code?</b>
+                <p>Since Makaney Code is designed for civil services and is not meant to identify small objects, we
+                    sacrifice -- based on location -- few meters (not exceeding ± 5.55 m) of accuracy to make the code
+                    as short and easy to remember as possible.</p>
+
+                <b>Q: I am an application developer and my application would benefit from Makaney Code, how can I
+                    include Makaney Code to my software?</b>
+                <p>No need for a license, Makaney Code is a non-profit project, free for everyone to use. Feel free to
+                    add Makaney Code to your application to better serve your customers. Technical details are available
+                    <a href="mkc_standard.html"> here.</a>
+                </p>
+
+                <b>Q: Does GPS devices support Makaney Code to identify places?</b>
+                <p>Not until their customers request for Makaney code to be included. Including Makaney Code to GPS
+                    devices or any GPS application is very simple and straightforward and would make it very convenient
+                    for transportation. GPS providers would love to hear customers suggestions, write a line or two to
+                    your favorite GPS provider.</p>
+
+
+                <b>Q: My friends sent me their Makaney Code but my navigation system does not support the Code yet?</b>
+                <p>You can translate Makaney Code to geographic coordinates (latitude and longitude), that appear below
+                    Makaney Code in small brackets.</p>
+
+                <b>Q: Beta? </b>
+                <p>Makaney Code is currently in beta, please report suggestions, problems, and improvements to <a
+                        href="mailto:support@makaney.net">ziyad@makaney.net </a> </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div id="BottomBar">
+        <div id="findbutton"> <a class="button" href="#" onclick="showhide('fplace')"> <span id="findbuttonText">Find
+                    Place</span></a> </div>
+        <div id="Directions"> <a class="button" href="#" onclick="showhide('PageFooter')"> <span id="dirbuttonText">Get
+                    Directions</span></a> </div>
+        <div id="mark"> <a class="button" href="#" onclick="addMarker()"> <span id="markText">Mark</span></a> </div>
+
+        <div id="iPhone"> <a class="button"
+                href="http://itunes.apple.com/us/app/makaney-code/id473566544?ls=1&mt=8"><span id="iPhoneText">iPhone or
+                    iPad</span></a> </div>
+        <div id="faqbutton"> <a class="button" href="#" onclick="showhide('FAQHELP')"> <span
+                    id="faqbuttonText">FAQ</span></a> </div>
+    </div>
+
+</body>
+
+</html>
